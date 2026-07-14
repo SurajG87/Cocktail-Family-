@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <title>Cocktail Family · guide</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        html, body {
+            height: 100%;
+            overflow: hidden;
+        }
+
+        body {
+            background: #e2f0f7;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 10px 8px 20px;
+            color: #1a3a44;
+            overflow-y: auto;
+        }
+
+        .app {
+            max-width: 560px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(2px);
+            border-radius: 28px;
+            padding: 14px 12px 20px;
+            box-shadow: 0 6px 20px rgba(0, 50, 70, 0.05);
+            border: 1px solid rgba(160, 200, 220, 0.3);
+            position: relative;
+        }
+
+        /* header */
+        .header {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            margin-bottom: 8px;
+            flex-wrap: wrap;
+            gap: 4px;
+        }
+        .header h1 {
+            font-size: 1.6rem;
+            font-weight: 350;
+            letter-spacing: -0.3px;
+            color: #08515e;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .header h1 span {
+            font-size: 1.2rem;
+        }
+        .quiz-toggle-btn {
+            background: #3d8fa8;
+            border: none;
+            color: white;
+            padding: 6px 18px;
+            border-radius: 60px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: 0.12s;
+            box-shadow: 0 2px 6px rgba(0,60,80,0.08);
+            border: 1px solid #6bb0c5;
+            z-index: 10;
+            position: relative;
+        }
+        .quiz-toggle-btn:active {
+            transform: scale(0.96);
+            background: #2a7a8f;
+        }
+
+        /* smaller tabs */
+        .family-nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px 8px;
+            margin: 4px 0 12px 0;
+            justify-content: center;
+        }
+
+        .family-btn {
+            background: #d6eaf5;
+            border: 1px solid #b8d3e0;
+            padding: 4px 12px;
+            border-radius: 40px;
+            font-size: 0.7rem;
+            font-weight: 500;
+            color: #1c5563;
+            cursor: pointer;
+            transition: 0.12s;
+            box-shadow: 0 1px 4px rgba(0,50,70,0.03);
+            letter-spacing: 0.1px;
+            white-space: nowrap;
+        }
+
+        .family-btn:active {
+            transform: scale(0.95);
+            background: #c0dceb;
+        }
+
+        .family-btn.active {
+            background: #3d8fa8;
+            border-color: #2f7a91;
+            color: white;
+            box-shadow: 0 2px 8px rgba(0,70,90,0.1);
+        }
+
+        /* detail card */
+        .detail-card {
+            background: white;
+            border-radius: 24px;
+            padding: 16px 14px 14px;
+            margin: 4px 0 8px;
+            border: 1px solid #c8dfe8;
+            box-shadow: 0 2px 10px rgba(0,50,70,0.02);
+        }
+
+        .family-name {
+            font-size: 1.4rem;
+            font-weight: 400;
+            letter-spacing: -0.2px;
+            color: #08515e;
+            border-bottom: 2px dashed #b8d8e5;
+            padding-bottom: 6px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            flex-wrap: wrap;
+        }
+
+        .family-name span {
+            font-size: 0.7rem;
+            font-weight: 300;
+            color: #2a7a88;
+            background: #e0f0f7;
+            padding: 0 12px;
+            border-radius: 40px;
+            line-height: 1.8;
+        }
+
+        .formula-box {
+            background: #f0f8fc;
+            padding: 10px 14px;
+            border-radius: 20px;
+            margin: 4px 0 12px;
+            border-left: 4px solid #4b9eb3;
+            font-size: 0.9rem;
+            color: #05454e;
+        }
+
+        .formula-box strong {
+            font-weight: 550;
+            color: #00616e;
+        }
+
+        .detail-line {
+            font-size: 0.82rem;
+            padding: 4px 0 3px 0;
+            border-bottom: 1px solid #ecf4f8;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 2px 8px;
+        }
+
+        .detail-line .label {
+            font-weight: 500;
+            color: #0b5e68;
+            min-width: 80px;
+        }
+
+        .cocktail-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin: 8px 0 4px;
+        }
+
+        .cocktail-tags span {
+            background: #d6eaf5;
+            padding: 3px 12px;
+            border-radius: 40px;
+            font-size: 0.7rem;
+            color: #00515c;
+        }
+
+        /* IMAGE BLOCK - improved for full image display */
+        .image-block {
+            margin: 12px 0 2px;
+            background: #e1eff5;
+            border-radius: 40px;
+            padding: 12px 12px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.8rem;
+            color: #005b66;
+            border: 1px solid #c2dce7;
+        }
+        .image-block .image-wrapper {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            border-radius: 16px;
+            background: #f0f8fc;
+            min-height: 120px;
+        }
+        .image-block img {
+            max-width: 100%;
+            width: auto;
+            height: auto;
+            max-height: 280px;
+            object-fit: contain;
+            display: block;
+            border-radius: 12px;
+        }
+        .image-block .image-label {
+            background: #cee6f0;
+            padding: 4px 18px;
+            border-radius: 60px;
+            font-size: 0.7rem;
+            color: #00424b;
+            display: inline-block;
+            margin-top: 2px;
+        }
+        .image-placeholder {
+            background: #cee6f0;
+            padding: 6px 16px;
+            border-radius: 60px;
+            font-size: 0.7rem;
+            color: #00424b;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 24px 12px;
+            color: #2a7a84;
+            font-size: 0.9rem;
+            background: #f0f8fc;
+            border-radius: 40px;
+            border: 1px dashed #a3cbd8;
+        }
+
+        /* QUIZ OVERLAY - full screen, one question at a time */
+        .quiz-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #e2f0f7;
+            z-index: 9999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 12px;
+        }
+        .quiz-overlay.open {
+            display: flex;
+        }
+
+        .quiz-overlay-inner {
+            max-width: 480px;
+            width: 100%;
+            max-height: 100%;
+            background: white;
+            border-radius: 28px;
+            padding: 20px 18px 24px;
+            box-shadow: 0 12px 40px rgba(0,40,60,0.25);
+            border: 1px solid #bed9e5;
+            display: flex;
+            flex-direction: column;
+            height: auto;
+            max-height: 96vh;
+            position: relative;
+        }
+
+        .quiz-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            flex-shrink: 0;
+        }
+        .quiz-header .close-quiz-btn {
+            background: #d9534f;
+            border: none;
+            color: white;
+            padding: 6px 18px;
+            border-radius: 60px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.12s;
+            border: 1px solid #c9302c;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+        }
+        .quiz-header .close-quiz-btn:active {
+            transform: scale(0.95);
+            background: #c9302c;
+        }
+        .quiz-header .question-counter {
+            font-size: 0.8rem;
+            color: #07555f;
+            font-weight: 500;
+            background: #e0f0f7;
+            padding: 4px 14px;
+            border-radius: 40px;
+        }
+
+        .quiz-question-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: 200px;
+        }
+
+        .quiz-question-text {
+            font-size: 1.1rem;
+            font-weight: 500;
+            color: #00464f;
+            margin-bottom: 16px;
+            line-height: 1.5;
+        }
+
+        .quiz-options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .quiz-options label {
+            background: #eef6fa;
+            padding: 10px 16px;
+            border-radius: 60px;
+            font-size: 0.9rem;
+            border: 2px solid #c5dde7;
+            cursor: pointer;
+            transition: 0.15s;
+            color: #004c57;
+            display: block;
+        }
+
+        .quiz-options input[type="radio"] {
+            display: none;
+        }
+
+        .quiz-options input[type="radio"]:checked + label {
+            background: #4b9eb3;
+            color: white;
+            border-color: #328194;
+        }
+
+        .quiz-options label.correct {
+            background: #5cb85c !important;
+            color: white !important;
+            border-color: #449d44 !important;
+        }
+
+        .quiz-options label.wrong {
+            background: #d9534f !important;
+            color: white !important;
+            border-color: #c9302c !important;
+        }
+
+        .quiz-options label.show-correct {
+            background: #5cb85c !important;
+            color: white !important;
+            border-color: #449d44 !important;
+        }
+
+        .quiz-options label.disabled {
+            cursor: default;
+            opacity: 0.8;
+        }
+
+        .quiz-nav {
+            display: flex;
+            gap: 10px;
+            margin: 8px 0 4px;
+            flex-shrink: 0;
+        }
+
+        .quiz-nav button {
+            flex: 1;
+            background: #2a7d8f;
+            border: none;
+            color: white;
+            padding: 10px 16px;
+            border-radius: 60px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: 0.12s;
+            box-shadow: 0 2px 6px rgba(0,60,80,0.08);
+        }
+
+        .quiz-nav button:active {
+            transform: scale(0.97);
+            background: #1d6a7a;
+        }
+
+        .quiz-nav button:disabled {
+            background: #b0c4cc;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+        .quiz-nav button:disabled:active {
+            transform: none;
+            background: #b0c4cc;
+        }
+
+        .quiz-nav button.primary-btn {
+            background: #3d8fa8;
+        }
+
+        .quiz-nav button.primary-btn:active {
+            background: #2a7a8f;
+        }
+
+        .quiz-feedback {
+            margin: 8px 0 2px;
+            padding: 10px 14px;
+            border-radius: 40px;
+            background: #e4f1f7;
+            font-size: 0.9rem;
+            color: #00424b;
+            display: none;
+            flex-shrink: 0;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .quiz-feedback.show {
+            display: block;
+        }
+
+        .quiz-result {
+            font-weight: 600;
+            text-align: center;
+            padding: 6px;
+        }
+
+        /* Footer */
+        .footer {
+            margin-top: 14px;
+            padding-top: 10px;
+            border-top: 1px solid #c8dde6;
+            text-align: center;
+            font-size: 0.7rem;
+            color: #46818e;
+        }
+        .footer a {
+            color: #2a7d8f;
+            text-decoration: none;
+            font-weight: 500;
+            transition: 0.12s;
+        }
+        .footer a:hover {
+            color: #1a5a68;
+            text-decoration: underline;
+        }
+        .footer a:active {
+            opacity: 0.7;
+        }
+
+        .main-content {
+            display: block;
+        }
+
+        @media (max-width: 480px) {
+            .app { padding: 10px 8px 16px; }
+            .header h1 { font-size: 1.3rem; }
+            .family-name { font-size: 1.2rem; }
+            .family-btn { font-size: 0.6rem; padding: 3px 10px; }
+            .detail-line { font-size: 0.75rem; }
+            .quiz-toggle-btn { font-size: 0.7rem; padding: 5px 14px; }
+            .quiz-overlay-inner { padding: 14px 12px 18px; }
+            .quiz-question-text { font-size: 1rem; }
+            .quiz-options label { font-size: 0.8rem; padding: 8px 14px; }
+            .quiz-header .close-quiz-btn { font-size: 0.7rem; padding: 4px 14px; }
+            .quiz-nav button { font-size: 0.8rem; padding: 8px 12px; }
+            .footer { font-size: 0.6rem; }
+            .image-block img { max-height: 200px; }
+        }
+
+        @media print {
+            body { background: white; padding: 0.1in; overflow: visible; }
+            .app { box-shadow: none; border: 1px solid #aaa; backdrop-filter: none; background: white; }
+            .quiz-overlay { display: none !important; }
+            .family-nav, .quiz-toggle-btn { display: none; }
+            .detail-card { break-inside: avoid; border: 1px solid #999; }
+            .footer { border-top: 1px solid #999; }
+        }
+    </style>
+</head>
+<body>
+<div class="app" id="app">
+
+    <!-- HEADER -->
+    <div class="header">
+        <h1>🍸 Cocktail <span>Family</span> 🐑</h1>
+        <button class="quiz-toggle-btn" id="quizToggleBtn">📝 Quiz Time</button>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="main-content" id="mainContent">
+        <div class="family-nav" id="familyNav"></div>
+        <div id="detailContainer">
+            <div class="empty-state">👆 select a family</div>
+        </div>
+        <!-- Footer -->
+        <div class="footer">
+            © 2026 · <a href="https://www.instagram.com/suraj.gurung87/" target="_blank" rel="noopener">@suraj.gurung87</a>
+        </div>
+    </div>
+
+    <!-- QUIZ OVERLAY (full screen, one question at a time) -->
+    <div class="quiz-overlay" id="quizOverlay">
+        <div class="quiz-overlay-inner">
+            <div class="quiz-header">
+                <button class="close-quiz-btn" id="closeQuizBtn">✕ Back</button>
+                <span class="question-counter" id="questionCounter">1 / 10</span>
+            </div>
+            <div class="quiz-question-container" id="quizQuestionContainer">
+                <!-- Dynamic content -->
+            </div>
+            <div class="quiz-nav" id="quizNav">
+                <button id="prevBtn" disabled>◀ Back</button>
+                <button id="nextBtn" class="primary-btn">Next ▶</button>
+            </div>
+            <div id="quizFeedback" class="quiz-feedback"></div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    (function() {
+        // ----- DATA from spreadsheet -----
+        // Removed "Family" from Sour, Collins, and Smash names
+        const families = [
+            { id: "sour", name: "The Sour", subtitle: "Foundation of Mixology",
+              formula: "2 oz Spirit + 22 ml Lemon Juice + 22 ml Simple Syrup.",
+              golden: "2:1:1 (Spirit : Sour : Sweet)",
+              egg: "Traditional: egg white for silky foam, mellows acidity.",
+              bitters: "Dash of bitters on foam — classic garnish.",
+              cocktails: "Pisco Sour, Amaretto Sour, Midori Sour, Daiquiri, Margarita",
+              imageLabel: "Classic Whiskey Sour with egg white foam",
+              imageUrl: "https://raw.githubusercontent.com/SurajG87/coffee-training-images/main/whiskysour.jpg" },
+            { id: "collins", name: "The Collins", subtitle: "Tall & Refreshing Sour",
+              formula: "2 oz Spirit + 22 ml Lemon + 22 ml Simple + Ice & Soda",
+              note: "Long drink: soda water, tall glass. Shake briefly.",
+              fun: "Tom Collins named after Old Tom Gin (19th c.)",
+              cocktails: "Tom Collins, John Collins, Vodka Collins, Elderflower Collins",
+              imageLabel: "Classic Tom Collins in a highball glass",
+              imageUrl: "https://raw.githubusercontent.com/SurajG87/coffee-training-images/main/Collins.png" },
+            { id: "gimlet", name: "The Gimlet", subtitle: "Lime-forward Sour",
+              formula: "2 oz Spirit + 30 ml Lime + 22 ml Simple",
+              acid: "Lime instead of lemon (less acidic, bump up lime).",
+              history: "British sailors, 1800s — prevented scurvy.",
+              origin: "Rear-Admiral Sir Thomas Desmond Gimlette, prescribed gin+lime.",
+              cocktails: "French Gimlet, Basil Gimlet, Vodka Gimlet",
+              imageLabel: "Gimlet",
+              imageUrl: "https://raw.githubusercontent.com/SurajG87/coffee-training-images/main/Gimlet.png" },
+            { id: "rickey", name: "The Rickey", subtitle: "Sparkling Gimlet",
+              formula: "2 oz Spirit + 30 ml Lime + 22 ml Simple + Top with Soda",
+              note: "Gimlet long: tall, sparkling with club soda.",
+              cocktails: "Bourbon Rickey, Mojito, Johnny Rickey",
+              imageLabel: "Gin Rickey in a highball glass",
+              imageUrl: "https://raw.githubusercontent.com/SurajG87/coffee-training-images/main/Rickey.png" },
+            { id: "sidecar", name: "The SideCar", subtitle: "Cognac Sour",
+              formula: "45 ml Cognac + 30 ml Cointreau + 15 ml Lemon Juice (3:2:1).",
+              sweetener: "Cointreau (orange liqueur) instead of simple syrup.",
+              history: "Post-WWI Paris/London; named after motorcycle sidecar.",
+              rim: "Sugar rim (1930s popular, controversial).",
+              cocktails: "Sidecar, White Lady, Margarita, Cosmopolitan, Between the Sheets",
+              imageLabel: "Classic Sidecar in a stemmed glass with sugar rim",
+              imageUrl: "https://raw.githubusercontent.com/SurajG87/coffee-training-images/main/Sidecar.png" },
+            { id: "smash", name: "The Smash", subtitle: "Julep's Rustic Cousin",
+              formula: "2 oz Spirit + 3 Lemon Wedges + 22 ml Simple + 6 Mint Leaves. Muddled, shaken, strained.",
+              vs: "Rustic vs Julep (gentle). Jerry Thomas: 'julep on a small plan'.",
+              citrus: "Lemon wedges (20th c. addition by Dale DeGroff).",
+              muddle: "Gently press; don't crush mint to avoid bitterness.",
+              cocktails: "Caipirinha, Gin Basil Smash, Brandy Smash, Whiskey Smash, Mint Julep",
+              imageLabel: "Whiskey Smash with cracked ice and mint bouquet",
+              imageUrl: "https://raw.githubusercontent.com/SurajG87/coffee-training-images/main/Smash.png" },
+            { id: "martini", name: "Martini", subtitle: "Spirit-Forward Classic",
+              formula: "2 oz Gin + 1 oz Dry Vermouth.",
+              history: "Descendant of Martinez (Manhattan with Old Tom gin).",
+              cocktails: "Dirty Martini, Gibson, Vesper, Martini",
+              imageLabel: "Classic Gin Martini with an olive",
+              imageUrl: "https://raw.githubusercontent.com/SurajG87/coffee-training-images/main/Martini.png" },
+            { id: "manhattan", name: "The Manhattan", subtitle: "Spirit-Forward Classic",
+              formula: "2 oz Spirit + 1 oz Modifier (Vermouth or Liqueur).",
+              note: "Whiskey's answer to the Martini.",
+              history: "Earliest mention 1882, New York newspaper.",
+              cocktails: "Manhattan, Rob Roy, Boulevardier",
+              imageLabel: "Classic Manhattan with a cherry",
+              imageUrl: "https://raw.githubusercontent.com/SurajG87/coffee-training-images/main/Manhattan.png" },
+            { id: "oldfashioned", name: "The Old Fashioned", subtitle: "Ancestor of All Cocktails",
+              formula: "2 oz Bourbon + White Sugar Cube + Bitters + Lemon & Orange Twist.",
+              first: "First cocktail definition (1806): spirit, sugar, water, bitters.",
+              why: "Patrons preferred 'old-fashioned' way vs. liqueurs.",
+              hot: "Slightly hot (undiluted) – flavor evolves as ice melts.",
+              cocktails: "Old Fashioned, Sazerac, Oaxaca Old Fashioned, Spirit + Amaro",
+              imageLabel: "Classic Old Fashioned with a large ice cube",
+              imageUrl: "https://raw.githubusercontent.com/SurajG87/coffee-training-images/main/OF.png" },
+            { id: "spritz", name: "The Spritz", subtitle: "Aperitivo Low ABV",
+              formula: "2 oz Aperitif or Liqueur + 3 oz Sparkling Wine + 1 oz Club Soda",
+              category: "Long & Effervescent / Low-Alcohol",
+              key: "Bitter aperitif liqueur + bubbles.",
+              prep: "Built in wine glass, ice last, gentle stir.",
+              origin: "Veneto, Austro-Hungarian Empire; 'spritz' (splash) of water.",
+              cocktails: "Aperol Spritz, Select Spritz, Campari Spritz",
+              imageLabel: "Select Spritz",
+              imageUrl: "https://raw.githubusercontent.com/SurajG87/coffee-training-images/main/Selectspritz.png" }
+        ];
+
+        // ----- QUIZ DATA (10 questions) -----
+        const quizData = [
+            { q: "Which family uses Cointreau as sweetener?", options: ["Sour", "SideCar", "Old Fashioned", "Gimlet"], correct: 1 },
+            { q: "Which family is known as the 'Ancestor of All Cocktails'?", options: ["Martini", "Manhattan", "Old Fashioned", "Spritz"], correct: 2 },
+            { q: "Which family typically uses an egg white for foam?", options: ["Sour", "Collins", "Rickey", "Smash"], correct: 0 },
+            { q: "Which drink is a 'Gimlet long' (sparkling)?", options: ["Rickey", "Collins", "SideCar", "Spritz"], correct: 0 },
+            { q: "Which family's formula is 45 ml Cognac + 30 ml Cointreau + 15 ml Lemon Juice?", options: ["SideCar", "Sour", "Manhattan", "Martini"], correct: 0 },
+            { q: "Which family is described as 'Julep's Rustic Cousin'?", options: ["Smash", "Collins", "Old Fashioned", "Spritz"], correct: 0 },
+            { q: "Which family uses a sugar cube and bitters?", options: ["Old Fashioned", "Manhattan", "Martini", "Gimlet"], correct: 0 },
+            { q: "Which family originated in the Veneto region with a splash of soda?", options: ["Spritz", "Rickey", "Collins", "Sour"], correct: 0 },
+            { q: "Which family is the 'Whiskey's answer to the Martini'?", options: ["Manhattan", "Old Fashioned", "SideCar", "Smash"], correct: 0 },
+            { q: "Which family is a 'Tall & Refreshing Sour' with soda water?", options: ["Collins", "Rickey", "Gimlet", "Spritz"], correct: 0 }
+        ];
+
+        // Shuffle questions
+        function shuffleArray(arr) {
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+
+        let shuffledQuiz = [];
+        let currentQuestionIndex = 0;
+        let userAnswers = [];
+        let quizSubmitted = false;
+
+        // ----- render nav -----
+        const nav = document.getElementById('familyNav');
+        const detailContainer = document.getElementById('detailContainer');
+        const mainContent = document.getElementById('mainContent');
+        const quizOverlay = document.getElementById('quizOverlay');
+        const quizToggleBtn = document.getElementById('quizToggleBtn');
+        const closeQuizBtn = document.getElementById('closeQuizBtn');
+        const quizQuestionContainer = document.getElementById('quizQuestionContainer');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const questionCounter = document.getElementById('questionCounter');
+        const quizFeedback = document.getElementById('quizFeedback');
+
+        function renderNav() {
+            let html = '';
+            families.forEach(f => {
+                const short = f.name.replace('The ','');
+                html += `<button class="family-btn" data-id="${f.id}">${short}</button>`;
+            });
+            nav.innerHTML = html;
+            const firstBtn = nav.querySelector('.family-btn');
+            if (firstBtn) {
+                firstBtn.classList.add('active');
+                showFamily(families[0].id);
+            }
+            nav.querySelectorAll('.family-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    nav.querySelectorAll('.family-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    showFamily(this.dataset.id);
+                });
+            });
+        }
+
+        function showFamily(id) {
+            const family = families.find(f => f.id === id);
+            if (!family) {
+                detailContainer.innerHTML = `<div class="empty-state">family not found</div>`;
+                return;
+            }
+            let html = `<div class="detail-card">`;
+            html += `<div class="family-name">${family.name} <span>${family.subtitle || ''}</span></div>`;
+            if (family.formula) {
+                html += `<div class="formula-box"><strong>▸</strong> ${family.formula}</div>`;
+            }
+            const fields = [
+                'golden','egg','bitters','note','fun','acid','history','origin',
+                'sweetener','rim','vs','citrus','muddle','first','why','hot','category','key','prep'
+            ];
+            const labels = {
+                golden:'Golden ratio', egg:'Egg white', bitters:'Bitters', note:'Note',
+                fun:'Fun fact', acid:'Acid', history:'History', origin:'Origin',
+                sweetener:'Sweetener', rim:'Rim', vs:'vs Julep', citrus:'Citrus',
+                muddle:'Muddling', first:'First cocktail', why:'Name origin', hot:'Slightly hot',
+                category:'Category', key:'Key trait', prep:'Preparation'
+            };
+            fields.forEach(key => {
+                if (family[key]) {
+                    html += `<div class="detail-line"><span class="label">${labels[key]||key}</span> ${family[key]}</div>`;
+                }
+            });
+            if (family.cocktails) {
+                let arr = family.cocktails.split(',').map(s => s.trim());
+                html += `<div class="cocktail-tags">${arr.map(c => `<span>${c}</span>`).join('')}</div>`;
+            }
+            // IMAGE - improved with wrapper for better display
+            if (family.imageUrl && family.imageUrl.trim() !== '') {
+                html += `<div class="image-block">`;
+                html += `<div class="image-wrapper"><img src="${family.imageUrl}" alt="${family.imageLabel || family.name}" loading="lazy"></div>`;
+                if (family.imageLabel) html += `<div class="image-label">${family.imageLabel}</div>`;
+                html += `</div>`;
+            } else if (family.imageLabel) {
+                html += `<div class="image-block">📸 <span class="image-placeholder">${family.imageLabel}</span></div>`;
+            }
+            html += `</div>`;
+            detailContainer.innerHTML = html;
+        }
+
+        renderNav();
+
+        // ----- QUIZ FUNCTIONS -----
+        function initQuiz() {
+            shuffledQuiz = shuffleArray([...quizData]);
+            userAnswers = new Array(shuffledQuiz.length).fill(null);
+            currentQuestionIndex = 0;
+            quizSubmitted = false;
+            quizFeedback.classList.remove('show');
+            quizFeedback.style.display = 'none';
+            renderQuestion();
+        }
+
+        function renderQuestion() {
+            const total = shuffledQuiz.length;
+            const q = shuffledQuiz[currentQuestionIndex];
+            const isComplete = quizSubmitted;
+
+            questionCounter.textContent = `${currentQuestionIndex + 1} / ${total}`;
+
+            let html = '';
+            html += `<div class="quiz-question-text">${currentQuestionIndex + 1}. ${q.q}</div>`;
+            html += `<div class="quiz-options" id="quizOptions">`;
+
+            q.options.forEach((opt, idx) => {
+                const isSelected = userAnswers[currentQuestionIndex] === idx;
+                let classes = '';
+                let disabled = '';
+
+                if (isComplete) {
+                    disabled = 'disabled';
+                    if (idx === q.correct) {
+                        classes = 'show-correct disabled';
+                    } else if (isSelected && idx !== q.correct) {
+                        classes = 'wrong disabled';
+                    } else if (isSelected && idx === q.correct) {
+                        classes = 'correct disabled';
+                    }
+                } else {
+                    if (isSelected) classes = 'selected';
+                }
+
+                const checked = isSelected ? 'checked' : '';
+                html += `
+                    <input type="radio" name="quiz_q" id="opt_${idx}" value="${idx}" ${checked} ${disabled}>
+                    <label for="opt_${idx}" class="${classes}">${opt}</label>
+                `;
+            });
+
+            html += `</div>`;
+            quizQuestionContainer.innerHTML = html;
+
+            // Add event listeners to radio buttons if not submitted
+            if (!isComplete) {
+                document.querySelectorAll('input[name="quiz_q"]').forEach(radio => {
+                    radio.addEventListener('change', function() {
+                        userAnswers[currentQuestionIndex] = parseInt(this.value);
+                        updateNavButtons();
+                        // Clear feedback when changing answer
+                        quizFeedback.classList.remove('show');
+                        quizFeedback.style.display = 'none';
+                    });
+                });
+            }
+
+            updateNavButtons();
+
+            // If quiz is complete, show results
+            if (isComplete) {
+                showResults();
+            }
+        }
+
+        function updateNavButtons() {
+            prevBtn.disabled = currentQuestionIndex === 0;
+            const isComplete = quizSubmitted;
+            const isLast = currentQuestionIndex === shuffledQuiz.length - 1;
+
+            if (isComplete) {
+                nextBtn.textContent = '📊 Results';
+                nextBtn.disabled = false;
+            } else if (isLast) {
+                nextBtn.textContent = '✅ Submit Quiz';
+                nextBtn.disabled = false;
+            } else {
+                nextBtn.textContent = 'Next ▶';
+                nextBtn.disabled = false;
+            }
+        }
+
+        function goToPrev() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                renderQuestion();
+            }
+        }
+
+        function goToNext() {
+            const total = shuffledQuiz.length;
+
+            if (quizSubmitted) {
+                // Show results again
+                showResults();
+                return;
+            }
+
+            // Check if current question is answered
+            if (userAnswers[currentQuestionIndex] === null) {
+                quizFeedback.textContent = '⚠️ Please select an answer before continuing.';
+                quizFeedback.style.display = 'block';
+                quizFeedback.classList.add('show');
+                quizFeedback.style.background = '#f7e5e5';
+                quizFeedback.style.color = '#8f3b3b';
+                return;
+            }
+
+            // If last question, submit quiz
+            if (currentQuestionIndex === total - 1) {
+                submitQuiz();
+                return;
+            }
+
+            // Go to next
+            currentQuestionIndex++;
+            renderQuestion();
+        }
+
+        function submitQuiz() {
+            quizSubmitted = true;
+            let correct = 0;
+            let total = shuffledQuiz.length;
+
+            // Check all answers
+            for (let i = 0; i < total; i++) {
+                if (userAnswers[i] === shuffledQuiz[i].correct) {
+                    correct++;
+                }
+            }
+
+            // Show results on last question
+            renderQuestion();
+            showResults(correct);
+        }
+
+        function showResults(correctCount) {
+            const total = shuffledQuiz.length;
+            let correct = correctCount || 0;
+
+            if (!correctCount) {
+                // Calculate if not passed
+                for (let i = 0; i < total; i++) {
+                    if (userAnswers[i] === shuffledQuiz[i].correct) {
+                        correct++;
+                    }
+                }
+            }
+
+            const pct = Math.round(correct / total * 100);
+            let emoji = pct >= 80 ? '🌟' : pct >= 60 ? '👍' : '📚';
+            let message = pct >= 80 ? 'Great job!' : pct >= 60 ? 'Good effort!' : 'Keep learning!';
+
+            // Show feedback with score
+            quizFeedback.textContent = `${emoji} ${message} You scored ${correct} / ${total} (${pct}%)`;
+            quizFeedback.style.display = 'block';
+            quizFeedback.classList.add('show');
+            quizFeedback.style.background = pct >= 70 ? '#d9f0e6' : '#f7f0d9';
+            quizFeedback.style.color = pct >= 70 ? '#0a4f44' : '#6b5a1a';
+
+            // Update nav buttons
+            nextBtn.textContent = '📊 Results';
+            nextBtn.disabled = false;
+        }
+
+        // ----- QUIZ TOGGLE -----
+        function openQuiz() {
+            quizOverlay.classList.add('open');
+            document.body.style.overflow = 'hidden';
+            initQuiz();
+        }
+
+        function closeQuiz() {
+            quizOverlay.classList.remove('open');
+            document.body.style.overflow = '';
+        }
+
+        quizToggleBtn.addEventListener('click', openQuiz);
+        closeQuizBtn.addEventListener('click', closeQuiz);
+
+        quizOverlay.addEventListener('click', function(e) {
+            if (e.target === quizOverlay) closeQuiz();
+        });
+
+        prevBtn.addEventListener('click', goToPrev);
+        nextBtn.addEventListener('click', goToNext);
+
+        // Keyboard navigation
+        document.addEventListener('keydown', function(e) {
+            if (!quizOverlay.classList.contains('open')) return;
+            if (e.key === 'ArrowLeft') goToPrev();
+            if (e.key === 'ArrowRight') goToNext();
+            if (e.key === 'Escape') closeQuiz();
+        });
+
+    })();
+</script>
+</body>
+</html>
